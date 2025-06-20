@@ -1,0 +1,48 @@
+name: Update
+
+"on":
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install jq
+        uses: dcarbone/install-jq-action@v3.0.1
+
+      - name: Get latest [e1000e-watchdog] git tag
+        uses: disafronov/find-latest-tag@v1.0.0
+        id: git-version
+        with:
+          repo: https://github.com/disafronov/e1000e-watchdog.git
+          tag: 'v[0-9]{1,}.[0-9]{1,}.[0-9]{1,}'
+
+      - name: Save latest [e1000e-watchdog] version into repo
+        run: |
+          mkdir -p files
+          wget "https://raw.githubusercontent.com/disafronov/e1000e-watchdog/${{ steps.git-version.outputs.tag }}/e1000e-watchdog" -O files/e1000e-watchdog
+
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: "upgrade/e1000e-watchdog/${{ steps.git-version.outputs.tag }}"
+          delete-branch: true
+          title: "chore(deps): upgrade e1000e-watchdog to ${{ steps.git-version.outputs.tag }}"
+          signoff: true
+          committer: GitHub <noreply@github.com>
+          author: GitHub <noreply@github.com>
+          commit-message: "chore(deps): upgrade e1000e-watchdog to ${{ steps.git-version.outputs.tag }}"
+          body: |
+            Release notes: https://github.com/disafronov/e1000e-watchdog/releases/tag/${{ steps.git-version.outputs.tag }}
+          draft: false
+          assignees: ${{ github.repository_owner }}
