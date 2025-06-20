@@ -19,6 +19,6 @@
 - name: Enable and start e1000e-watchdog service
   ansible.builtin.systemd:
     name: e1000e-watchdog
-    enabled: yes
+    enabled: true
     state: started
-    daemon_reload: yes
+    daemon_reload: true
