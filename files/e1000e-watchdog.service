@@ -1,0 +1,12 @@
+[Unit]
+Description=e1000e watchdog service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/lib/e1000e-watchdog
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

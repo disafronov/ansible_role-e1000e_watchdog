@@ -1,0 +1,24 @@
+---
+
+- name: Copy e1000e-watchdog script with owner and permissions
+  ansible.builtin.copy:
+    src: e1000e-watchdog
+    dest: /usr/local/lib/e1000e-watchdog
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Copy e1000e-watchdog systemd service file
+  ansible.builtin.copy:
+    src: e1000e-watchdog.service
+    dest: /etc/systemd/system/e1000e-watchdog.service
+    mode: '0644'
+    owner: root
+    group: root
+
+- name: Enable and start e1000e-watchdog service
+  ansible.builtin.systemd:
+    name: e1000e-watchdog
+    enabled: yes
+    state: started
+    daemon_reload: yes
