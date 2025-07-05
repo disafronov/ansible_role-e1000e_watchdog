@@ -41,7 +41,7 @@ jobs:
           signoff: true
           committer: GitHub <noreply@github.com>
           author: GitHub <noreply@github.com>
-          commit-message: "chore(deps): upgrade e1000e-watchdog to ${{ steps.git-version.outputs.tag }}"
+          commit-message: "feature: upgrade e1000e-watchdog to ${{ steps.git-version.outputs.tag }}"
           body: |
             Release notes: https://github.com/disafronov/e1000e-watchdog/releases/tag/${{ steps.git-version.outputs.tag }}
           draft: false
